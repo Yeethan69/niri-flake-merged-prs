@@ -1958,6 +1958,12 @@
                 }
               )
             ]);
+            background-color =
+            nullable types.str // {
+              description = ''
+                Set the default background color that niri draws for workspaces. This is visible when you're not using any background tools like swaybg.
+              '';
+            };
           }
           {
             empty-workspace-above-first =
@@ -3204,6 +3210,7 @@
         ))
         (flag' "always-center-single-column" cfg.layout.always-center-single-column)
         (flag' "empty-workspace-above-first" cfg.layout.empty-workspace-above-first)
+        (nullable leaf "background-color" cfg.layout.background-color)
       ])
 
       (plain "cursor" [

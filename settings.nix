@@ -462,6 +462,54 @@
       inactive-color = nullable types.str;
     };
 
+    workspace-shadow-rule = section {
+      enable =
+        nullable types.bool
+        // {
+          default = false;
+        };
+      offset =
+        nullable (record {
+          x =
+            required float-or-int
+            // {
+              default = 0.0;
+            };
+          y =
+            required float-or-int
+            // {
+              default = 10.0;
+            };
+        })
+        // {
+          description = shadow-descriptions.offset;
+        };
+
+      softness =
+        nullable float-or-int
+        // {
+          default = 40.0;
+          description = shadow-descriptions.softness;
+        };
+
+      spread =
+        nullable float-or-int
+        // {
+          default = 10.0;
+          description = shadow-descriptions.spread;
+        };
+
+      draw-behind-window = nullable types.bool;
+
+      color =
+        nullable types.str
+        // {
+          default = "#00000050";
+        };
+
+      inactive-color = nullable types.str;
+    };
+
     geometry-corner-radius-rule = nullable (record {
       top-left = required types.float;
       top-right = required types.float;
@@ -1231,13 +1279,13 @@
                 The alpha channel for this color will be ignored.
               '';
             };
-            workspace-shadow =
-              workspace-shadow-rule
-              // {
-                description = ''
-                  Configure shadows for workspaces in the overview mode.
-                '';
-              };
+          workspace-shadow =
+            workspace-shadow-rule
+            // {
+              description = ''
+                Configure shadows for workspaces in the overview mode.
+              '';
+            };
         };
       }
 
@@ -2988,6 +3036,17 @@
       ]);
 
       shadow-rule = map' plain' (cfg: [
+        (flag' "on" (cfg.enable == true))
+        (flag' "off" (cfg.enable == false))
+        (nullable leaf "offset" cfg.offset)
+        (nullable leaf "softness" cfg.softness)
+        (nullable leaf "spread" cfg.spread)
+        (nullable leaf "draw-behind-window" cfg.draw-behind-window)
+        (nullable leaf "color" cfg.color)
+        (nullable leaf "inactive-color" cfg.inactive-color)
+      ]);
+
+      workspace-shadow = map' plain' (cfg: [
         (flag' "on" (cfg.enable == true))
         (flag' "off" (cfg.enable == false))
         (nullable leaf "offset" cfg.offset)

@@ -1231,6 +1231,13 @@
                 The alpha channel for this color will be ignored.
               '';
             };
+            workspace-shadow =
+              workspace-shadow-rule
+              // {
+                description = ''
+                  Configure shadows for workspaces in the overview mode.
+                '';
+              };
         };
       }
 
@@ -3176,7 +3183,14 @@
 
       (nullable plain "overview" (
         let
-          children = lib.mapAttrsToList (nullable leaf) cfg.overview;
+          children =
+            lib.mapAttrsToList (
+              name: value:
+                if name == "workspace-shadow"
+                then workspace-shadow "workspace-shadow" value
+                else nullable leaf name value
+            )
+            cfg.overview;
         in
           if lib.remove null children == []
           then null
